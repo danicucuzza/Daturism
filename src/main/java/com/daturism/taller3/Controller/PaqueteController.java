@@ -22,6 +22,16 @@ public class PaqueteController {
         return paqueteService.crearPaquete(paquete);
     }
 
+    @PostMapping("/{paqueteId}/destino/{destinoId}")
+    public ResponseEntity<Paquete> asignarDestino(@PathVariable Long paqueteId, @PathVariable Long destinoId) {
+        try {
+            Paquete paquete = paqueteService.asignarDestino(paqueteId, destinoId);
+            return ResponseEntity.ok(paquete);
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<Paquete> obtenerPaquete(@PathVariable Long id) {
         Optional<Paquete> paquete = paqueteService.obtenerPaquete(id);
