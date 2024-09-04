@@ -2,7 +2,7 @@ package com.daturism.taller3.Service;
 
 import com.daturism.taller3.Model.Destino;
 import com.daturism.taller3.Model.Paquete;
-import com.daturism.taller3.Repository.DestinoRepository;
+import com.daturism.taller3.Repository.IDestinoRepository;
 import com.daturism.taller3.Repository.PaqueteRepository;
 import org.springframework.stereotype.Service;
 
@@ -12,9 +12,9 @@ import java.util.Optional;
 @Service
 public class PaqueteService {
     private final PaqueteRepository paqueteRepository;
-    private final DestinoRepository destinoRepository;
+    private final IDestinoRepository destinoRepository;
 
-    public PaqueteService(PaqueteRepository paqueteRepository, DestinoRepository destinoRepository) {
+    public PaqueteService(PaqueteRepository paqueteRepository, IDestinoRepository destinoRepository) {
         this.paqueteRepository = paqueteRepository;
         this.destinoRepository = destinoRepository;
     }

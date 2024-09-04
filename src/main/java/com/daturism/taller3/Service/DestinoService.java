@@ -1,33 +1,61 @@
 package com.daturism.taller3.Service;
-
 import com.daturism.taller3.Model.Destino;
-import com.daturism.taller3.Repository.DestinoRepository;
+import com.daturism.taller3.Repository.IDestinoRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
-public class DestinoService {
-    private final DestinoRepository destinoRepository;
+public class DestinoService implements IDestinoService{
 
-    public DestinoService(DestinoRepository destinoRepository) {
-        this.destinoRepository = destinoRepository;
+    @Autowired
+    private IDestinoRepository iDestinoRepository;
+
+    @Override
+    public List<Destino> getDestinos() {
+        List<Destino> listaDestinos = iDestinoRepository.findAll();
+        return listaDestinos;
     }
 
-    public Destino crearDestino(Destino destino) {
-        return destinoRepository.save(destino);
+    @Override
+    public void saveDestino(Destino destino) {
+        iDestinoRepository.save(destino);
     }
 
-    public Optional<Destino> obtenerDestino(Long id) {
-        return destinoRepository.findById(id);
+    @Override
+    public Destino findDestino(Long id_destino) {
+        Destino destino = iDestinoRepository.findById(id_destino).orElse(null);
+        return destino;
     }
 
-    public List<Destino> obtenerTodosLosDestinos() {
-        return destinoRepository.findAll();
+    @Override
+    public void deleteDestino(Long id_destino) {
+        iDestinoRepository.deleteById(id_destino);
     }
 
-    public void eliminarDestino(Long id) {
-        destinoRepository.deleteById(id);
+    @Override
+    public void editDestino(Destino destino) {
+        this.saveDestino(destino);
+    }
+
+    @Override
+    public List<Destino> getDestinosByIds(List<Long> ids) {
+        return iDestinoRepository.findAllById(ids);
+    }
+
+    @Override
+    public List<Destino> findDestinoByName(String palabra) {
+        String palabraLower = palabra.toLowerCase();
+        List<Destino> listaDestinos = iDestinoRepository.findAll();
+        List<Destino> listaDestinosFiltrados = new ArrayList<>();
+
+        for (Destino destino : listaDestinos) {
+            String textoComparar = destino.getNombre();
+            if (textoComparar != null && textoComparar.toLowerCase().contains(palabraLower)) {
+                listaDestinosFiltrados.add(destino);
+            }
+        }
+        return listaDestinosFiltrados;
     }
 }

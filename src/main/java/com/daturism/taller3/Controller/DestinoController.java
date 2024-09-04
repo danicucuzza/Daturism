@@ -1,7 +1,8 @@
 package com.daturism.taller3.Controller;
 
 import com.daturism.taller3.Model.Destino;
-import com.daturism.taller3.Service.DestinoService;
+import com.daturism.taller3.Service.IDestinoService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,43 +12,40 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/destinos")
 public class DestinoController {
-    private final DestinoService destinoService;
 
-    public DestinoController(DestinoService destinoService) {
-        this.destinoService = destinoService;
+    @Autowired
+    private IDestinoService iDestinoService;
+
+    @PostMapping("/crear")
+    public String createDestino(@RequestBody Destino destino){
+        iDestinoService.saveDestino(destino);
+        return "El Destino fue creado correctamente";
     }
 
-    @PostMapping
-    public Destino crearDestino(@RequestBody Destino destino){
-        return destinoService.crearDestino(destino);
+    @GetMapping("/traer")
+    public List<Destino> getDestinos() {
+        return iDestinoService.getDestinos();
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Destino> obtenerDestino(@PathVariable Long id) {
-        Optional<Destino> destino = destinoService.obtenerDestino(id);
-        return destino.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    @DeleteMapping("/eliminar/{id}")
+    public String deleteDestino(@PathVariable Long id_destino) {
+        iDestinoService.deleteDestino(id_destino);
+        return "El destino fue eliminado correctamente";
     }
 
-    @GetMapping
-    public List<Destino> obtenerTodosLosDestinos() {
-        return destinoService.obtenerTodosLosDestinos();
+    @PutMapping("/editar")
+    public Destino editDestino(@RequestBody Destino destino) {
+        iDestinoService.editDestino(destino);
+        return iDestinoService.findDestino(destino.getId_destino());
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Destino> actualizarDestino(@PathVariable Long id, @RequestBody Destino destino) {
-        if (!destinoService.obtenerDestino(id).isPresent()) {
-            return ResponseEntity.notFound().build();
-        }
-        destino.setId(id);
-        return ResponseEntity.ok(destinoService.crearDestino(destino));
+    @GetMapping("/traerids")
+    public List<Destino> getDestinosByIds(@RequestParam List<Long> ids) {
+        return iDestinoService.getDestinosByIds(ids);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> eliminarDestino(@PathVariable Long id) {
-        if (!destinoService.obtenerDestino(id).isPresent()) {
-            return ResponseEntity.notFound().build();
-        }
-        destinoService.eliminarDestino(id);
-        return  ResponseEntity.noContent().build();
+    @GetMapping("/buscar/palabra")
+    public List<Destino> findDestinoByName(@RequestParam String palabra) {
+        return iDestinoService.findDestinoByName(palabra);
     }
 }

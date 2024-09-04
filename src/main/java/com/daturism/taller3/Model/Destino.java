@@ -1,70 +1,38 @@
 package com.daturism.taller3.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
-
+@Getter @Setter
 @Entity
 public class Destino {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    private Long id_destino;
     private String nombre;
-
     private String descripcion;
-
     private double precio;
-
     private String ubicacion;
-
     private String imagenUrl;
 
-    public Long getId() {
-        return id;
+    @ManyToOne
+    @JoinColumn (name = "id_paquete")
+    @JsonIgnore
+    Paquete paquete;
+
+    public Destino() {
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
+    public Destino(Long id_destino, String nombre, String descripcion, double precio, String ubicacion, String imagenUrl, Paquete paquete) {
+        this.id_destino = id_destino;
         this.nombre = nombre;
-    }
-
-    public String getDescripcion() {
-        return descripcion;
-    }
-
-    public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
-    }
-
-    public double getPrecio() {
-        return precio;
-    }
-
-    public void setPrecio(double precio) {
         this.precio = precio;
-    }
-
-    public String getUbicacion() {
-        return ubicacion;
-    }
-
-    public void setUbicacion(String ubicacion) {
         this.ubicacion = ubicacion;
-    }
-
-    public String getImagenUrl() {
-        return imagenUrl;
-    }
-
-    public void setImagenUrl(String imagenUrl) {
         this.imagenUrl = imagenUrl;
+        this.paquete = paquete;
     }
 }
