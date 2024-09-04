@@ -1,7 +1,10 @@
 package com.daturism.taller3.Controller;
 
 import com.daturism.taller3.Model.Paquete;
+import com.daturism.taller3.Service.IPaqueteService;
 import com.daturism.taller3.Service.PaqueteService;
+import com.daturism.taller3.dto.PaqueteDestinoDTO;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,53 +14,45 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/paquetes")
 public class PaqueteController {
-    private final PaqueteService paqueteService;
 
-    public PaqueteController(PaqueteService paqueteService) {
-        this.paqueteService = paqueteService;
+    @Autowired
+    private IPaqueteService iPaqueteService;
+
+    @PostMapping("/crear")
+    public String crearPaquete(@RequestBody Paquete paquete) {
+        iPaqueteService.savePaquete(paquete);
+        return "El paquete fue creado correctamente";
     }
 
-    @PostMapping
-    public Paquete crearPaquete(@RequestBody Paquete paquete) {
-        return paqueteService.crearPaquete(paquete);
+    @GetMapping("/traer")
+    public List<Paquete> getPaquetes() {
+        return iPaqueteService.getPaquetes();
     }
 
-    @PostMapping("/{paqueteId}/destino/{destinoId}")
-    public ResponseEntity<Paquete> asignarDestino(@PathVariable Long paqueteId, @PathVariable Long destinoId) {
-        try {
-            Paquete paquete = paqueteService.asignarDestino(paqueteId, destinoId);
-            return ResponseEntity.ok(paquete);
-        } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
-        }
+    @DeleteMapping("/eliminar/{id}")
+    public String deletePaquete(@PathVariable Long id_paquete) {
+        iPaqueteService.deletePaquete(id_paquete);
+        return "El paquete fue eliminado correctamente";
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Paquete> obtenerPaquete(@PathVariable Long id) {
-        Optional<Paquete> paquete = paqueteService.obtenerPaquete(id);
-        return  paquete.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    @PutMapping("/editar")
+    public Paquete editPaquete(@RequestBody Paquete paquete){
+        iPaqueteService.editPaquete(paquete);
+        return iPaqueteService.findPaquete(paquete.getId_paquete());
     }
 
-    @GetMapping
-    public List<Paquete> obtenerTodosLosPaquetes() {
-        return paqueteService.obtenerTodosLosPaquetes();
+    @GetMapping("/buscar/palabra")
+    public List<Paquete> findPaqueteByName(@RequestParam String palabra) {
+        return iPaqueteService.findPaqueteByName(palabra);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Paquete> actualizarPaquete(@PathVariable Long id, @RequestBody Paquete paquete) {
-        if (!paqueteService.obtenerPaquete(id).isPresent()) {
-            return ResponseEntity.notFound().build();
-        }
-        paquete.setId(id);
-        return ResponseEntity.ok(paqueteService.crearPaquete(paquete));
+    @GetMapping("/destinos/{id_paquete}")
+    public PaqueteDestinoDTO destinoByPaquete(@PathVariable Long id_paquete) {
+        return iPaqueteService.destinoByPaquete(id_paquete);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> eliminarPaquete(@PathVariable Long id) {
-        if (!paqueteService.obtenerPaquete(id).isPresent()) {
-            return ResponseEntity.notFound().build();
-        }
-        paqueteService.eliminarPaquete(id);
-        return ResponseEntity.noContent().build();
+    @PostMapping("/asociardestino/{id_paquete}")
+    public Paquete addDestinoInPaquete(@PathVariable Long id_paquete, @RequestBody List<Long> destinoIds) {
+        return iPaqueteService.addDestinosInPaquete(id_paquete, destinoIds);
     }
 }

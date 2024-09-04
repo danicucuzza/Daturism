@@ -3,11 +3,8 @@ package com.daturism.taller3.Controller;
 import com.daturism.taller3.Model.Destino;
 import com.daturism.taller3.Service.IDestinoService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/destinos")
