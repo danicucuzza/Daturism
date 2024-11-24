@@ -1,5 +1,6 @@
 package com.daturism.taller3.Controller;
 
+import com.daturism.taller3.Model.Destino;
 import com.daturism.taller3.Model.Paquete;
 import com.daturism.taller3.Service.IPaqueteService;
 import com.daturism.taller3.Service.PaqueteService;
@@ -24,15 +25,14 @@ public class PaqueteController {
         return "El paquete fue creado correctamente";
     }
 
-    @GetMapping("/traer")
-    public List<Paquete> getPaquetes() {
-        return iPaqueteService.getPaquetes();
+    @GetMapping("/{id}")
+    public Paquete obtenerPaquete(@PathVariable Long id) {
+        return iPaqueteService.findPaquete(id);
     }
 
-    @DeleteMapping("/eliminar/{id}")
-    public String deletePaquete(@PathVariable Long id_paquete) {
-        iPaqueteService.deletePaquete(id_paquete);
-        return "El paquete fue eliminado correctamente";
+    @GetMapping("/traertodos")
+    public List<Paquete> getPaquetes() {
+        return iPaqueteService.getPaquetes();
     }
 
     @PutMapping("/editar")
@@ -41,15 +41,21 @@ public class PaqueteController {
         return iPaqueteService.findPaquete(paquete.getId_paquete());
     }
 
-    @GetMapping("/buscar/palabra")
+    @DeleteMapping("/eliminar/{id}")
+    public String deletePaquete(@PathVariable Long id_paquete) {
+        iPaqueteService.deletePaquete(id_paquete);
+        return "El paquete fue eliminado correctamente";
+    }
+
+    @GetMapping("/buscar/{palabra}")
     public List<Paquete> findPaqueteByName(@RequestParam String palabra) {
         return iPaqueteService.findPaqueteByName(palabra);
     }
 
-    @GetMapping("/destinos/{id_paquete}")
-    public PaqueteDestinoDTO destinoByPaquete(@PathVariable Long id_paquete) {
-        return iPaqueteService.destinoByPaquete(id_paquete);
-    }
+//    @GetMapping("/destinos/{id_paquete}")
+//    public PaqueteDestinoDTO destinoByPaquete(@PathVariable Long id_paquete) {
+//        return iPaqueteService.destinoByPaquete(id_paquete);
+//    }
 
     @PostMapping("/asociardestino/{id_paquete}")
     public Paquete addDestinoInPaquete(@PathVariable Long id_paquete, @RequestBody List<Long> destinoIds) {

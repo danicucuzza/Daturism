@@ -21,7 +21,7 @@ public class Destino {
     @ManyToOne
     @JoinColumn (name = "id_paquete")
     @JsonIgnore
-    Paquete paquete;
+    private Paquete paquete;
 
     public Destino() {
     }

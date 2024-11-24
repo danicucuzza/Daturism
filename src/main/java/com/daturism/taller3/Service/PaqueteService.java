@@ -76,25 +76,27 @@ public class PaqueteService implements IPaqueteService{
     }
 
     @Override
-    public Paquete addDestinosInPaquete(Long id_paquete, List<Long> destinoIds) {
-        Optional<Paquete> paqueteOptional = iPaqueteRepository.findById(id_paquete);
-        if (paqueteOptional.isPresent()) {
-            Paquete paquete = paqueteOptional.get();
-            for (Long destinoId : destinoIds) {
-                Optional<Destino> destinoOptional = iDestinoRepository.findById(destinoId);
-                if (destinoOptional.isPresent()) {
-                    Destino destino = destinoOptional.get();
-                    destino.setPaquete(paquete);
-                    iDestinoRepository.save(destino);
-                    if (!paquete.getListaDeDestinos().contains(destino)) {
-                        paquete.getListaDeDestinos().add(destino);
-                    }
-                }
-            }
-            iPaqueteRepository.save(paquete);
-            return paquete;
-        }
-        throw new RuntimeException("Paquete no encontrado");
+    public Paquete addDestinosInPaquete(Long idPaquete, List<Long> destinoIds) {
+        // Obtener el paquete por ID
+        Paquete paquete = iPaqueteRepository.findById(idPaquete)
+                .orElseThrow(() -> new RuntimeException("Paquete no encontrado"));
+
+        // Obtener los destinos por sus IDs
+        List<Destino> destinos = iDestinoRepository.findAllById(destinoIds);
+
+        // Asociar los destinos al paquete
+        paquete.getListaDeDestinos().addAll(destinos);
+
+        // Sumar los precios de todos los destinos asociados al paquete
+        double totalPrecio = paquete.getListaDeDestinos().stream()
+                .mapToDouble(Destino::getPrecio)
+                .sum();
+
+        // Actualizar el precio total del paquete
+        paquete.setPrecioTotal(totalPrecio);
+
+        // Guardar el paquete actualizado en la base de datos
+        return iPaqueteRepository.save(paquete);
     }
 }
 

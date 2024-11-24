@@ -1,5 +1,6 @@
 package com.daturism.taller3.Controller;
 
+import com.daturism.taller3.Model.Cliente;
 import com.daturism.taller3.Model.Destino;
 import com.daturism.taller3.Service.IDestinoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,12 +15,17 @@ public class DestinoController {
     private IDestinoService iDestinoService;
 
     @PostMapping("/crear")
-    public String createDestino(@RequestBody Destino destino){
+    public Destino createDestino(@RequestBody Destino destino){
         iDestinoService.saveDestino(destino);
-        return "El Destino fue creado correctamente";
+        return destino;
     }
 
-    @GetMapping("/traer")
+    @GetMapping("/{id}")
+    public Destino obtenerDestino(@PathVariable Long id) {
+        return iDestinoService.findDestino(id);
+    }
+
+    @GetMapping("/traertodos")
     public List<Destino> getDestinos() {
         return iDestinoService.getDestinos();
     }
@@ -36,12 +42,12 @@ public class DestinoController {
         return iDestinoService.findDestino(destino.getId_destino());
     }
 
-    @GetMapping("/traerids")
-    public List<Destino> getDestinosByIds(@RequestParam List<Long> ids) {
-        return iDestinoService.getDestinosByIds(ids);
-    }
+//    @GetMapping("/traerids")
+//    public List<Destino> getDestinosByIds(@RequestParam List<Long> ids) {
+//        return iDestinoService.getDestinosByIds(ids);
+//    }
 
-    @GetMapping("/buscar/palabra")
+    @GetMapping("/buscar/{palabra}")
     public List<Destino> findDestinoByName(@RequestParam String palabra) {
         return iDestinoService.findDestinoByName(palabra);
     }
