@@ -17,13 +17,6 @@ Bienvenido al proyecto E-commerce de Turismo, una plataforma en línea para gest
 - **Spring Data JPA**
 - **MySQL**
 
-### Frontend
-
-- **TypeScript**
-- **React**
-- **HTML5**
-- **CSS3**
-
 ### Otros
 
 - **Docker** (para contenedorización)
