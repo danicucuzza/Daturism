@@ -56,26 +56,42 @@ public class ClienteService implements IClienteService {
     }
 
     @Override
-    public Cliente addPaqueteInCliente(Long id_cliente, List<Long> paquetesIds) {
-        Optional<Cliente> clienteOptional = iClienteRepository.findById(id_cliente);
-        if (clienteOptional.isPresent()) {
-            Cliente cliente = clienteOptional.get();
-            for (Long paqueteId : paquetesIds) {
-                Optional<Paquete> paqueteOptional = iPaqueteRepository.findById(paqueteId);
-                if (paqueteOptional.isPresent()) {
-                    Paquete paquete = paqueteOptional.get();
-                    paquete.setCliente(cliente);
-                    iPaqueteRepository.save(paquete);
-                    if (!cliente.getListaDePaquetes().contains(paquete)) {
-                        cliente.getListaDePaquetes().add(paquete);
-                    }
-                }
-            }
-            iClienteRepository.save(cliente);
-            return cliente;
-        }
-        throw new RuntimeException("Paquete no encontrado");
+    public void addToCart(Long clienteId, Paquete paquete) {
+        Cliente cliente = iClienteRepository.findById(clienteId).orElseThrow(() -> new RuntimeException("Cliente no encontrado"));
+        cliente.getCarrito().add(paquete);
+        cliente.setCantidadDePaquetes(cliente.getCantidadDePaquetes() + 1);
+        iClienteRepository.save(cliente);
     }
+
+    @Override
+    public void removeFromCart(Long clienteId, Paquete paquete) {
+        Cliente cliente = iClienteRepository.findById(clienteId).orElseThrow(() -> new RuntimeException("Cliente no encontrado"));
+        cliente.getCarrito().remove(paquete);
+        cliente.setCantidadDePaquetes(cliente.getCantidadDePaquetes() - 1);
+        iClienteRepository.save(cliente);
+    }
+
+//    @Override
+//    public Cliente addPaqueteInCliente(Long id_cliente, List<Long> paquetesIds) {
+//        Optional<Cliente> clienteOptional = iClienteRepository.findById(id_cliente);
+//        if (clienteOptional.isPresent()) {
+//            Cliente cliente = clienteOptional.get();
+//            for (Long paqueteId : paquetesIds) {
+//                Optional<Paquete> paqueteOptional = iPaqueteRepository.findById(paqueteId);
+//                if (paqueteOptional.isPresent()) {
+//                    Paquete paquete = paqueteOptional.get();
+//                    paquete.setCliente(cliente);
+//                    iPaqueteRepository.save(paquete);
+//                    if (!cliente.getListaDePaquetes().contains(paquete)) {
+//                        cliente.getListaDePaquetes().add(paquete);
+//                    }
+//                }
+//            }
+//            iClienteRepository.save(cliente);
+//            return cliente;
+//        }
+//        throw new RuntimeException("Paquete no encontrado");
+//    }
 
     @Override
     public void comprarPaquete(Long clienteId, Paquete paquete) {

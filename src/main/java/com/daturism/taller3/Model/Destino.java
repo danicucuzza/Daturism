@@ -2,19 +2,24 @@ package com.daturism.taller3.Model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
+
+import java.math.BigDecimal;
 
 @Getter @Setter
 @Entity
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Destino {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id_destino;
+
     private String nombre;
     private String descripcion;
-    private double precio;
+    private BigDecimal precio;
     private String ubicacion;
     private String imagenUrl;
 
@@ -23,16 +28,11 @@ public class Destino {
     @JsonIgnore
     private Paquete paquete;
 
-    public Destino() {
-    }
-
-    public Destino(Long id_destino, String nombre, String descripcion, double precio, String ubicacion, String imagenUrl, Paquete paquete) {
-        this.id_destino = id_destino;
+    public Destino(String nombre, String descripcion, BigDecimal precio, String ubicacion, String imagenUrl) {
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.precio = precio;
         this.ubicacion = ubicacion;
         this.imagenUrl = imagenUrl;
-        this.paquete = paquete;
     }
 }

@@ -7,7 +7,9 @@ import com.daturism.taller3.Repository.IPaqueteRepository;
 import com.daturism.taller3.dto.PaqueteDestinoDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -75,6 +77,7 @@ public class PaqueteService implements IPaqueteService{
         throw new RuntimeException("Paquete no encontrado");
     }
 
+    @Transactional
     @Override
     public Paquete addDestinosInPaquete(Long idPaquete, List<Long> destinoIds) {
         // Obtener el paquete por ID
@@ -84,19 +87,28 @@ public class PaqueteService implements IPaqueteService{
         // Obtener los destinos por sus IDs
         List<Destino> destinos = iDestinoRepository.findAllById(destinoIds);
 
+        // Crear una nueva lista modificable para los destinos
+        List<Destino> listaDeDestinos = new ArrayList<>(paquete.getListaDeDestinos());
+        listaDeDestinos.addAll(destinos);
+
         // Asociar los destinos al paquete
-        paquete.getListaDeDestinos().addAll(destinos);
+        paquete.setListaDeDestinos(listaDeDestinos);
 
         // Sumar los precios de todos los destinos asociados al paquete
-        double totalPrecio = paquete.getListaDeDestinos().stream()
-                .mapToDouble(Destino::getPrecio)
-                .sum();
+        BigDecimal totalPrecio = listaDeDestinos.stream()
+                .map(Destino::getPrecio)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
 
         // Actualizar el precio total del paquete
         paquete.setPrecioTotal(totalPrecio);
 
         // Guardar el paquete actualizado en la base de datos
         return iPaqueteRepository.save(paquete);
+    }
+
+    @Override
+    public void saveAll(List<Paquete> paquetes) {
+        iPaqueteRepository.saveAll(paquetes);
     }
 }
 

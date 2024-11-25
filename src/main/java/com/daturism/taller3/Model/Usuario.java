@@ -1,12 +1,15 @@
 package com.daturism.taller3.Model;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Getter @Setter
 @Entity
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Usuario {
+
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
@@ -17,20 +20,6 @@ public class Usuario {
     private String email;
 
     private String password;
-
     private String telefono;
-
     private String direccion;
-
-    public Usuario() {
-    }
-
-    public Usuario(Long id, String nombre, String email, String password, String telefono, String direccion) {
-        this.id = id;
-        this.nombre = nombre;
-        this.email = email;
-        this.password = password;
-        this.telefono = telefono;
-        this.direccion = direccion;
-    }
 }

@@ -29,4 +29,6 @@ public interface IPaqueteService {
 
     //AGREGAR DESTINOS A UN PAQUETE EXISTENTE
     public Paquete addDestinosInPaquete (Long id_paquete, List<Long> destinoIds);
+
+    void saveAll(List<Paquete> paquetes);
 }

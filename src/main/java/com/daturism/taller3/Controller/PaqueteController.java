@@ -52,11 +52,6 @@ public class PaqueteController {
         return iPaqueteService.findPaqueteByName(palabra);
     }
 
-//    @GetMapping("/destinos/{id_paquete}")
-//    public PaqueteDestinoDTO destinoByPaquete(@PathVariable Long id_paquete) {
-//        return iPaqueteService.destinoByPaquete(id_paquete);
-//    }
-
     @PostMapping("/asociardestino/{id_paquete}")
     public Paquete addDestinoInPaquete(@PathVariable Long id_paquete, @RequestBody List<Long> destinoIds) {
         return iPaqueteService.addDestinosInPaquete(id_paquete, destinoIds);

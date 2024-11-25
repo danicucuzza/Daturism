@@ -1,25 +1,31 @@
 package com.daturism.taller3.Model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
 @Getter @Setter
 @Entity
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Paquete {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id_paquete;
+
     private String nombre;
     private String descripcion;
-    private double precioTotal;
+    private BigDecimal precioTotal;
     private String duracion;
+    private String imagenUrl;
 
-    @OneToMany (mappedBy = "paquete")
+    @OneToMany(mappedBy = "paquete", cascade = CascadeType.ALL)
     private List<Destino> listaDeDestinos;
 
     @ManyToOne
@@ -27,18 +33,11 @@ public class Paquete {
     @JsonIgnore
     Cliente cliente;
 
-    public Paquete() {
-    }
-
-    public Paquete(Long id_paquete, String nombre, String descripcion, double precioTotal, String duracion, List<Destino> listaDeDestinos) {
-        this.id_paquete = id_paquete;
+    public Paquete(String nombre, String descripcion, String duracion, String imagenUrl, List<Destino> listaDeDestinos) {
         this.nombre = nombre;
         this.descripcion = descripcion;
-        this.precioTotal = precioTotal;
         this.duracion = duracion;
+        this.imagenUrl = imagenUrl;
         this.listaDeDestinos = listaDeDestinos;
-    }
-
-    public Paquete(String s, String s1) {
     }
 }

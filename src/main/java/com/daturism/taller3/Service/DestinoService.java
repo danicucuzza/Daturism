@@ -58,4 +58,9 @@ public class DestinoService implements IDestinoService{
         }
         return listaDestinosFiltrados;
     }
+
+    @Override
+    public void saveAll(List<Destino> destinos) {
+        iDestinoRepository.saveAll(destinos);
+    }
 }

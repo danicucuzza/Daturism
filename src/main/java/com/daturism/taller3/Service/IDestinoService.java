@@ -1,5 +1,7 @@
 package com.daturism.taller3.Service;
 import com.daturism.taller3.Model.Destino;
+import com.daturism.taller3.Model.Paquete;
+
 import java.util.List;
 
 public interface IDestinoService {
@@ -23,4 +25,6 @@ public interface IDestinoService {
 
     //BUSCAR DESTINOS POR PALABRA
     public List<Destino> findDestinoByName(String palabra);
+
+    void saveAll(List<Destino> destinos);
 }

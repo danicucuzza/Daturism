@@ -22,18 +22,16 @@ public class CarritoController {
     public Cliente addToCart(@PathVariable Long id_cliente, @RequestBody Long paqueteId) {
         Cliente cliente = iClienteService.findCliente(id_cliente);
         Paquete paquete = iPaqueteService.findPaquete(paqueteId);
-        cliente.addToCart(paquete);
-        iClienteService.saveCliente(cliente);
-        return cliente;
+        iClienteService.addToCart(cliente.getId(), paquete);
+        return iClienteService.findCliente(id_cliente);
     }
 
     @PostMapping("/{id_cliente}/eliminar")
     public Cliente removeFromCart(@PathVariable Long id_cliente, @RequestBody Long paqueteId){
         Cliente cliente = iClienteService.findCliente(id_cliente);
         Paquete paquete = iPaqueteService.findPaquete(paqueteId);
-        cliente.removeFromCart(paquete);
-        iClienteService.saveCliente(cliente);
-        return cliente;
+        iClienteService.removeFromCart(cliente.getId(), paquete);
+        return iClienteService.findCliente(id_cliente);
     }
     
     @PostMapping("/{id_cliente}/comprar")
@@ -41,17 +39,11 @@ public class CarritoController {
         Cliente cliente = iClienteService.findCliente(id_cliente);
         for (Long id_paquete : paqueteIds) {
             Paquete paquete = iPaqueteService.findPaquete(id_paquete);
-            cliente.removeFromCart(paquete);
+            iClienteService.removeFromCart(cliente.getId(), paquete);
             cliente.getListaDePaquetes().add(paquete);
             iPaqueteService.savePaquete(paquete);
         }
         iClienteService.saveCliente(cliente);
         return "Compra realizada correctamente";
     }
-
-
-    
-
-        
-    
 }

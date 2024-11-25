@@ -28,8 +28,14 @@ public interface IClienteService {
     // BUSCAR CLIENTES POR NOMBRE
     List<Cliente> findClienteByName(String nombre);
 
-    // AGREGAR UN PAQUETE A UN CLIENTE
-    public Cliente addPaqueteInCliente(Long id_cliente, List<Long> paquetesIds);
+    //AGREGAR PRODUCTOS AL CARRITO
+    void addToCart(Long clienteId, Paquete paquete);
+
+    //QUITAR PRODUCTOS DEL CARRITO
+    void removeFromCart(Long clienteId, Paquete paquete);
+
+//    // AGREGAR UN PAQUETE A UN CLIENTE
+//    public Cliente addPaqueteInCliente(Long id_cliente, List<Long> paquetesIds);
 
     // COMPRAR UN PAQUETE
     void comprarPaquete(Long clienteId, Paquete paquete);

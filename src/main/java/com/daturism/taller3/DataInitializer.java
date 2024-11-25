@@ -2,59 +2,40 @@ package com.daturism.taller3;
 
 import com.daturism.taller3.Model.Destino;
 import com.daturism.taller3.Model.Paquete;
-import com.daturism.taller3.Repository.IDestinoRepository;
-import com.daturism.taller3.Repository.IPaqueteRepository;
-import jakarta.annotation.PostConstruct;
+import com.daturism.taller3.Service.IDestinoService;
+import com.daturism.taller3.Service.IPaqueteService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import java.math.BigDecimal;
+import java.util.Arrays;
 
 @Component
-public class DataInitializer {
+public class DataInitializer implements CommandLineRunner {
 
-//    @Autowired
-//    private IDestinoRepository iDestinoRepository;
-//
-//    @Autowired
-//    private IPaqueteRepository iPaqueteRepository;
-//
-//    @PostConstruct
-//    public void initData() {
-//        // Crear destinos predeterminados
-//        Destino destino1 = new Destino(
-//                1L,  // id_destino
-//                "Mar del plata",  // nombre
-//                "Ciudad con playa",  // descripción
-//                100.0,  // precio
-//                "Ubicación 1",  // ubicacion
-//                "imagen1.jpg",  // imagenUrl
-//                null  // paquete
-//        );
-//
-//        Destino destino2 = new Destino(
-//                2L,  // id_destino
-//                "Destino 2",  // nombre
-//                "Descripción de destino 2",  // descripción
-//                200.0,  // precio
-//                "Ubicación 2",  // ubicacion
-//                "imagen2.jpg",  // imagenUrl
-//                null  // paquete
-//        );
-//
-//        // Guardar destinos en la base de datos
-//        destino1 = iDestinoRepository.save(destino1);
-//        destino2 = iDestinoRepository.save(destino2);
-//
-//        // Crear paquete y asociar los destinos
-//        Paquete paquete = new Paquete();
-//        paquete.setNombre("Paquete Predeterminado");
-//        paquete.setListaDeDestinos(List.of(destino1, destino2)); // Asociar destinos al paquete
-//        paquete.setPrecioTotal(destino1.getPrecio() + destino2.getPrecio());
-//
-//        // Guardar paquete en la base de datos
-//        iPaqueteRepository.save(paquete);
-//
-//        System.out.println("Datos predeterminados inicializados correctamente");
-//    }
+    @Autowired
+    private IDestinoService destinoService;
+
+    @Autowired
+    private IPaqueteService paqueteService;
+
+    @Transactional
+    @Override
+    public void run(String... args) throws Exception {
+        // Crear Destinos sin asignarles un paquete
+        Destino destino1 = new Destino("Buenos Aires", "La capital de Argentina, conocida por su rica vida cultural y su arquitectura europea.", new BigDecimal("1000.00"), "Buenos Aires", "http://example.com/buenos_aires.jpg");
+        Destino destino2 = new Destino("Bariloche", "Destino popular por sus lagos y montañas, ideal para esquiar en invierno.", new BigDecimal("1500.00"), "Bariloche", "http://example.com/bariloche.jpg");
+        Destino destino3 = new Destino("Mendoza", "Famosa por sus bodegas y la producción de vino Malbec.", new BigDecimal("1200.00"), "Mendoza", "http://example.com/mendoza.jpg");
+        Destino destino4 = new Destino("Salta", "Conocida por su arquitectura colonial y paisajes montañosos.", new BigDecimal("1300.00"), "Salta", "http://example.com/salta.jpg");
+        Destino destino5 = new Destino("Córdoba", "Ciudad universitaria con una vibrante vida nocturna y bellos edificios coloniales.", new BigDecimal("1100.00"), "Córdoba", "http://example.com/cordoba.jpg");
+        Destino destino6 = new Destino("Ushuaia", "La ciudad más austral del mundo, puerta de entrada a la Antártida.", new BigDecimal("2000.00"), "Ushuaia", "http://example.com/ushuaia.jpg");
+        destinoService.saveAll(Arrays.asList(destino1, destino2, destino3, destino4, destino5, destino6));
+
+        // Crear Paquetes con destinos asignados
+        Paquete paquete1 = new Paquete("Paquete Andes", "Explora la majestuosidad de los Andes con este paquete que incluye los destinos más icónicos.", "3 days", "http://example.com/paquete_andes.jpg", Arrays.asList(destino1, destino2, destino3));
+        Paquete paquete2 = new Paquete("Paquete Patagónico", "Sumérgete en la belleza de la Patagonia con este exclusivo paquete.", "http://example.com/paquete_patagonico.jpg", "7 days", Arrays.asList(destino4, destino5, destino6));
+        paqueteService.saveAll(Arrays.asList(paquete1, paquete2));
+    }
 }
