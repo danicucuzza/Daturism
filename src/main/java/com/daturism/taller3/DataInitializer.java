@@ -1,9 +1,11 @@
 package com.daturism.taller3;
 
+import com.daturism.taller3.Model.Cliente;
 import com.daturism.taller3.Model.Destino;
 import com.daturism.taller3.Model.Paquete;
-import com.daturism.taller3.Service.IDestinoService;
-import com.daturism.taller3.Service.IPaqueteService;
+import com.daturism.taller3.Service.ClienteService;
+import com.daturism.taller3.Service.DestinoService;
+import com.daturism.taller3.Service.PaqueteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
@@ -11,15 +13,20 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
+import java.util.List;
 
 @Component
 public class DataInitializer implements CommandLineRunner {
 
     @Autowired
-    private IDestinoService destinoService;
+    private DestinoService destinoService;
 
     @Autowired
-    private IPaqueteService paqueteService;
+    private PaqueteService paqueteService;
+
+    @Autowired
+    private ClienteService clienteService;
+
 
     @Transactional
     @Override
@@ -34,8 +41,11 @@ public class DataInitializer implements CommandLineRunner {
         destinoService.saveAll(Arrays.asList(destino1, destino2, destino3, destino4, destino5, destino6));
 
         // Crear Paquetes con destinos asignados
-        Paquete paquete1 = new Paquete("Paquete Andes", "Explora la majestuosidad de los Andes con este paquete que incluye los destinos más icónicos.", "3 days", "http://example.com/paquete_andes.jpg", Arrays.asList(destino1, destino2, destino3));
-        Paquete paquete2 = new Paquete("Paquete Patagónico", "Sumérgete en la belleza de la Patagonia con este exclusivo paquete.", "http://example.com/paquete_patagonico.jpg", "7 days", Arrays.asList(destino4, destino5, destino6));
+        Paquete paquete1 = new Paquete("Paquete Andes", "Explora la majestuosidad de los Andes con este paquete que incluye los destinos más icónicos.", "3 days", "http://example.com/paquete_andes.jpg");
+        Paquete paquete2 = new Paquete("Paquete Patagónico", "Sumérgete en la belleza de la Patagonia con este exclusivo paquete.", "7 days", "http://example.com/paquete_patagonico.jpg");
         paqueteService.saveAll(Arrays.asList(paquete1, paquete2));
+
+        Cliente cliente1 = new Cliente("Juan", "juan.perez@gmail.com", "password123", "1544236543", "calle falsa 123");
+        clienteService.saveCliente(cliente1);
     }
 }

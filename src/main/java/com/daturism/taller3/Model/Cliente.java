@@ -1,26 +1,90 @@
 package com.daturism.taller3.Model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
-import java.util.Set;
+
 
 @Getter @Setter
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-public class Cliente extends Usuario{
+@Table(name = "clientes")
+public class Cliente implements UserDetails{
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    private Long id;
+
+    private String nombre;
+
+    @Column(unique = true)
+    private String email;
+
+    private String password;
+    private String telefono;
+    private String direccion;
     private String tipoCliente;
 
-    @OneToMany(mappedBy = "cliente")
-    private List<Paquete> listaDePaquetes;
+    @Enumerated(EnumType.STRING)
+    private Role role;
+
+    @OneToMany(mappedBy = "cliente", cascade = CascadeType.REMOVE)
+    private List<Venta> ListaVenta;
 
     @OneToMany
-    @JoinColumn(name = "cliente_id")
-    private List<Paquete> carrito = new ArrayList<>();
+    private List<Paquete> carritoDeCompras;
 
-    private int cantidadDePaquetes;
+    public enum Role {
+        CLIENTE,
+        ADMIN
+    }
+
+    public Cliente(String nombre, String email, String password, String telefono, String direccion) {
+        this.nombre = nombre;
+        this.email = email;
+        this.password = password;
+        this.telefono = telefono;
+        this.direccion = direccion;
+        this.role = Role.CLIENTE;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return role != null
+                ? List.of(new SimpleGrantedAuthority("ROLE_" + role.name()))
+                : List.of(new SimpleGrantedAuthority("ROLE_CLIENTE"));
+    }
+
+    @Override
+    public String getUsername() {
+        return email;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 }

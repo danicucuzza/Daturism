@@ -5,12 +5,13 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Getter @Setter
 @Entity
-@Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "destinos")
 public class Destino {
 
     @Id
@@ -20,6 +21,8 @@ public class Destino {
     private String nombre;
     private String descripcion;
     private BigDecimal precio;
+    private int maxPeople;
+    private int duration;
     private String ubicacion;
     private String imagenUrl;
 

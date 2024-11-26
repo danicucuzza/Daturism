@@ -1,23 +1,18 @@
 package com.daturism.taller3.Controller;
 
-import com.daturism.taller3.Model.Destino;
 import com.daturism.taller3.Model.Paquete;
-import com.daturism.taller3.Service.IPaqueteService;
 import com.daturism.taller3.Service.PaqueteService;
-import com.daturism.taller3.dto.PaqueteDestinoDTO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/paquetes")
 public class PaqueteController {
 
     @Autowired
-    private IPaqueteService iPaqueteService;
+    private PaqueteService iPaqueteService;
 
     @PostMapping("/crear")
     public String crearPaquete(@RequestBody Paquete paquete) {

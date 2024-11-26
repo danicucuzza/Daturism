@@ -1,8 +1,7 @@
 package com.daturism.taller3.Controller;
 
-import com.daturism.taller3.Model.Cliente;
 import com.daturism.taller3.Model.Destino;
-import com.daturism.taller3.Service.IDestinoService;
+import com.daturism.taller3.Service.DestinoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
@@ -12,7 +11,7 @@ import java.util.List;
 public class DestinoController {
 
     @Autowired
-    private IDestinoService iDestinoService;
+    private DestinoService iDestinoService;
 
     @PostMapping("/crear")
     public Destino createDestino(@RequestBody Destino destino){

@@ -7,44 +7,37 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class DestinoService implements IDestinoService{
+public class DestinoService{
 
     @Autowired
     private IDestinoRepository iDestinoRepository;
 
-    @Override
     public List<Destino> getDestinos() {
         List<Destino> listaDestinos = iDestinoRepository.findAll();
         return listaDestinos;
     }
 
-    @Override
     public void saveDestino(Destino destino) {
         iDestinoRepository.save(destino);
     }
 
-    @Override
     public Destino findDestino(Long id_destino) {
         Destino destino = iDestinoRepository.findById(id_destino).orElse(null);
         return destino;
     }
 
-    @Override
     public void deleteDestino(Long id_destino) {
         iDestinoRepository.deleteById(id_destino);
     }
 
-    @Override
     public void editDestino(Destino destino) {
         this.saveDestino(destino);
     }
 
-    @Override
     public List<Destino> getDestinosByIds(List<Long> ids) {
         return iDestinoRepository.findAllById(ids);
     }
 
-    @Override
     public List<Destino> findDestinoByName(String palabra) {
         String palabraLower = palabra.toLowerCase();
         List<Destino> listaDestinos = iDestinoRepository.findAll();
@@ -59,7 +52,6 @@ public class DestinoService implements IDestinoService{
         return listaDestinosFiltrados;
     }
 
-    @Override
     public void saveAll(List<Destino> destinos) {
         iDestinoRepository.saveAll(destinos);
     }

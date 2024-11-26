@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class PaqueteService implements IPaqueteService{
+public class PaqueteService{
 
     @Autowired
     private IPaqueteRepository iPaqueteRepository;
@@ -23,35 +23,29 @@ public class PaqueteService implements IPaqueteService{
     @Autowired
     private IDestinoRepository iDestinoRepository;
 
-    @Override
+
     public List<Paquete> getPaquetes() {
         List<Paquete> listaPaquetes = iPaqueteRepository.findAll();
         return listaPaquetes;
     }
 
-    @Override
     public void savePaquete(Paquete paquete) {
         iPaqueteRepository.save(paquete);
     }
 
-    @Override
     public void deletePaquete(Long id_paquete) {
         iPaqueteRepository.deleteById(id_paquete);
     }
 
-    @Override
     public Paquete findPaquete(Long id_paquete) {
         Paquete paquete = iPaqueteRepository.findById(id_paquete).orElse(null);
         return paquete;
     }
 
-    @Override
     public void editPaquete(Paquete paquete) {
         this.savePaquete(paquete);
     }
 
-
-    @Override
     public List<Paquete> findPaqueteByName(String palabra) {
         String palabraLower = palabra.toLowerCase();
         List<Paquete> listaPaquetes = iPaqueteRepository.findAll();
@@ -66,7 +60,6 @@ public class PaqueteService implements IPaqueteService{
         return listaPaquetesFiltrado;
     }
 
-    @Override
     public PaqueteDestinoDTO destinoByPaquete(Long id_paquete) {
         Optional<Paquete> paqueteOptional = iPaqueteRepository.findById(id_paquete);
         if (paqueteOptional.isPresent()) {
@@ -78,7 +71,6 @@ public class PaqueteService implements IPaqueteService{
     }
 
     @Transactional
-    @Override
     public Paquete addDestinosInPaquete(Long idPaquete, List<Long> destinoIds) {
         // Obtener el paquete por ID
         Paquete paquete = iPaqueteRepository.findById(idPaquete)
@@ -106,7 +98,6 @@ public class PaqueteService implements IPaqueteService{
         return iPaqueteRepository.save(paquete);
     }
 
-    @Override
     public void saveAll(List<Paquete> paquetes) {
         iPaqueteRepository.saveAll(paquetes);
     }

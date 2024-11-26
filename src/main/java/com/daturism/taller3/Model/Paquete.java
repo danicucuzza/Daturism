@@ -10,13 +10,14 @@ import java.util.Set;
 
 @Getter @Setter
 @Entity
-@Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "paquetes")
 public class Paquete {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @Column(name = "id_paquete")
     private Long id_paquete;
 
     private String nombre;
@@ -24,20 +25,27 @@ public class Paquete {
     private BigDecimal precioTotal;
     private String duracion;
     private String imagenUrl;
+    private int stock;
 
     @OneToMany(mappedBy = "paquete", cascade = CascadeType.ALL)
     private List<Destino> listaDeDestinos;
 
     @ManyToOne
-    @JoinColumn (name = "id_cliente")
-    @JsonIgnore
-    Cliente cliente;
+    @JoinColumn(name = "id_item")
+    private Item item;
 
-    public Paquete(String nombre, String descripcion, String duracion, String imagenUrl, List<Destino> listaDeDestinos) {
+    @JsonIgnore
+    @OneToMany(mappedBy = "paquete", cascade = CascadeType.REMOVE)
+    private List<DetalleVenta> detalleVentaList;
+
+    @ManyToOne
+    @JoinColumn(name = "cliente_id")
+    private Cliente cliente;
+
+    public Paquete(String nombre, String descripcion, String duracion, String imagenUrl) {
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.duracion = duracion;
         this.imagenUrl = imagenUrl;
-        this.listaDeDestinos = listaDeDestinos;
     }
 }

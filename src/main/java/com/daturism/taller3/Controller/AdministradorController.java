@@ -1,28 +1,36 @@
 package com.daturism.taller3.Controller;
-
 import com.daturism.taller3.Model.Cliente;
 import com.daturism.taller3.Model.Destino;
 import com.daturism.taller3.Model.Paquete;
 import com.daturism.taller3.Service.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/admin")
 public class AdministradorController {
 
     @Autowired
-    private IClienteService iClienteService;
+    private ClienteService iClienteService;
     @Autowired
-    private IPaqueteService iPaqueteService;
+    private PaqueteService iPaqueteService;
     @Autowired
-    private IDestinoService iDestinoService;
+    private DestinoService iDestinoService;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     // Métodos para gestionar Clientes
     @PostMapping("/clientes/crear")
     public Cliente crearCliente(@RequestBody Cliente cliente) {
+        // Establecer rol de admin si no está definido
+        if (cliente.getRole() == null) {
+            cliente.setRole(Cliente.Role.CLIENTE);
+        }
+
+        // Encriptar contraseña
+        cliente.setPassword(passwordEncoder.encode(cliente.getPassword()));
+
         iClienteService.saveCliente(cliente);
         return cliente;
     }
@@ -34,9 +42,21 @@ public class AdministradorController {
 
     @PutMapping("/clientes/{id}")
     public Cliente actualizarCliente(@PathVariable Long id, @RequestBody Cliente cliente) {
-        cliente.setId(id);
-        iClienteService.editCliente(cliente);
-        return cliente;
+        Cliente clienteExistente = iClienteService.findCliente(id);
+
+        // Actualizar campos
+        clienteExistente.setNombre(cliente.getNombre());
+        clienteExistente.setEmail(cliente.getEmail());
+        clienteExistente.setTelefono(cliente.getTelefono());
+        clienteExistente.setDireccion(cliente.getDireccion());
+
+        // Si se proporciona nueva contraseña, encriptarla
+        if (cliente.getPassword() != null && !cliente.getPassword().isEmpty()) {
+            clienteExistente.setPassword(passwordEncoder.encode(cliente.getPassword()));
+        }
+
+        iClienteService.editCliente(clienteExistente);
+        return clienteExistente;
     }
 
     @DeleteMapping("/clientes/{id}")
@@ -44,10 +64,6 @@ public class AdministradorController {
         iClienteService.deleteCliente(id);
         return "Cliente eliminado correctamente";
     }
-
-
-
-
 
     // Métodos para gestionar Paquetes
     @PostMapping("/paquetes/crear")
@@ -73,9 +89,6 @@ public class AdministradorController {
         iPaqueteService.deletePaquete(id);
         return "Paquete eliminado correctamente";
     }
-
-
-
 
     // Métodos para gestionar Destinos
     @PostMapping("/destinos/crear")

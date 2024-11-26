@@ -1,13 +1,23 @@
 package com.daturism.taller3.Model;
 
-import jakarta.persistence.Entity;
+import jakarta.persistence.*;
 import lombok.*;
 
-@Getter @Setter
 @Entity
-@NoArgsConstructor
+@Data
 @AllArgsConstructor
-public class Administrador extends Usuario{
+@Table(name = "admins")
+public class Administrador{
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    private Long id;
+
+    private String nombre;
+
+    @Column(unique = true)
+    private String email;
+
+    private String password;
     private String nivelDeAcceso;
 }

@@ -1,10 +1,13 @@
 package com.daturism.taller3.Controller;
 
+import com.daturism.taller3.Config.SecurityConfig;
 import com.daturism.taller3.Model.Cliente;
 import com.daturism.taller3.Model.Destino;
 import com.daturism.taller3.Model.Paquete;
 import com.daturism.taller3.Service.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -13,78 +16,55 @@ import java.util.List;
 @RequestMapping("/api/clientes")
 public class ClienteController {
     @Autowired
-    private IClienteService iClienteService;
+    private ClienteService clienteService;
     @Autowired
-    private IPaqueteService iPaqueteService;
-    @Autowired
-    private IDestinoService iDestinoService;
+    private PasswordEncoder passwordEncorder;
 
+    @PostMapping("/registro")
+    public ResponseEntity<Cliente> registrarCliente(@RequestBody Cliente cliente) {
+        if (cliente.getRole() == null) {
+            cliente.setRole(Cliente.Role.CLIENTE);
+        }
 
-    @PostMapping("/crear")
-    public Cliente crearCliente(@RequestBody Cliente cliente) {
-        iClienteService.saveCliente(cliente);
-        return cliente;
+        cliente.setPassword(passwordEncorder.encode(cliente.getPassword()));
+
+        clienteService.saveCliente(cliente);
+        return ResponseEntity.ok(cliente);
+    }
+
+    @PostMapping("/registro-admin")
+    public ResponseEntity<Cliente> registrarAdmin(@RequestBody Cliente cliente) {
+        cliente.setRole(Cliente.Role.ADMIN);
+        cliente.setPassword(passwordEncorder.encode(cliente.getPassword()));
+
+        clienteService.saveCliente(cliente);
+        return ResponseEntity.ok(cliente);
     }
 
     @GetMapping("/{id}")
     public Cliente obtenerCliente(@PathVariable Long id) {
-        return iClienteService.findCliente(id);
+        return clienteService.findCliente(id);
     }
 
     @PutMapping("/{id}")
     public Cliente actualizarCliente(@PathVariable Long id, @RequestBody Cliente cliente) {
         cliente.setId(id);
-        iClienteService.editCliente(cliente);
+        clienteService.editCliente(cliente);
         return cliente;
     }
 
     @DeleteMapping("/{id}")
     public String eliminarCliente(@PathVariable Long id) {
-        iClienteService.deleteCliente(id);
+        clienteService.deleteCliente(id);
         return "Cliente eliminado correctamente";
     }
 
-    @PostMapping("/{id}/asignardestinos/{paqueteId}")
-    public Paquete asignarDestinos(@PathVariable Long id, @PathVariable Long paqueteId, @RequestBody List<Long> destinoIds) {
-        Paquete paquete = iPaqueteService.findPaquete(paqueteId);
-        List<Destino> destinos = iDestinoService.getDestinosByIds(destinoIds);
-        paquete.setListaDeDestinos(destinos);
-        iPaqueteService.savePaquete(paquete);
-        return paquete;
-    }
-
-//    @PostMapping("/agregarpaquete/{id_cliente}")
-//    public Paquete addPaqueteInCliente(@PathVariable Long id, @RequestBody List<Long> paqueteIds) {
-//        return iPaqueteService.addDestinosInPaquete(id, paqueteIds);
+//    @PostMapping("/{id}/asignardestinos/{paqueteId}")
+//    public Paquete asignarDestinos(@PathVariable Long id, @PathVariable Long paqueteId, @RequestBody List<Long> destinoIds) {
+//        Paquete paquete = paqueteService.findPaquete(paqueteId);
+//        List<Destino> destinos = destinoService.getDestinosByIds(destinoIds);
+//        paquete.setListaDeDestinos(destinos);
+//        paqueteService.savePaquete(paquete);
+//        return paquete;
 //    }
-
-    @PostMapping("/agregarpaquete/{id_cliente}")
-    public Cliente addPaqueteInCliente(@PathVariable Long id_cliente, @RequestBody List<Long> paqueteIds) {
-        Cliente cliente = iClienteService.findCliente(id_cliente);
-
-        for (Long paqueteId : paqueteIds) {
-            Paquete paquete = iPaqueteService.findPaquete(paqueteId);
-            paquete.setCliente(cliente); // Asocia el cliente al paquete
-            cliente.getListaDePaquetes().add(paquete); // Añade el paquete al cliente
-            iPaqueteService.savePaquete(paquete); // Guarda el paquete actualizado
-        }
-
-        iClienteService.saveCliente(cliente); // Guarda el cliente con los paquetes asignados
-        return cliente;
-    }
-
-
-    @PostMapping("/{id}/comprar")
-    public String comprarPaquete(@PathVariable Long id_cliente, @RequestBody Long paquetesIds) {
-        Cliente cliente = iClienteService.findCliente(id_cliente);
-        Paquete paquete = iPaqueteService.findPaquete(paquetesIds);
-        cliente.getListaDePaquetes().add(paquete); // Implementar lógica de compra aquí
-        iClienteService.saveCliente(cliente);
-        return "Compra realizada correctamente";
-    }
-
-    @GetMapping("/traertodos")
-    public List<Cliente> obtenerClientes() {
-        return iClienteService.getClientes();
-    }
 }
