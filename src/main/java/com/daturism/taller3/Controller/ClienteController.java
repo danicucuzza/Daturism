@@ -1,44 +1,35 @@
 package com.daturism.taller3.Controller;
 
-import com.daturism.taller3.Config.SecurityConfig;
+
 import com.daturism.taller3.Model.Cliente;
-import com.daturism.taller3.Model.Destino;
-import com.daturism.taller3.Model.Paquete;
+import com.daturism.taller3.Model.Role;
 import com.daturism.taller3.Service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/api/clientes")
 public class ClienteController {
+    private final ClienteService clienteService;
+    private final PasswordEncoder passwordEncoder;
+
     @Autowired
-    private ClienteService clienteService;
-    @Autowired
-    private PasswordEncoder passwordEncorder;
-
-    @PostMapping("/registro")
-    public ResponseEntity<Cliente> registrarCliente(@RequestBody Cliente cliente) {
-        if (cliente.getRole() == null) {
-            cliente.setRole(Cliente.Role.CLIENTE);
-        }
-
-        cliente.setPassword(passwordEncorder.encode(cliente.getPassword()));
-
-        clienteService.saveCliente(cliente);
-        return ResponseEntity.ok(cliente);
+    public ClienteController(ClienteService clienteService, PasswordEncoder passwordEncoder) {
+        this.clienteService = clienteService;
+        this.passwordEncoder = passwordEncoder;
     }
 
-    @PostMapping("/registro-admin")
-    public ResponseEntity<Cliente> registrarAdmin(@RequestBody Cliente cliente) {
-        cliente.setRole(Cliente.Role.ADMIN);
-        cliente.setPassword(passwordEncorder.encode(cliente.getPassword()));
-
-        clienteService.saveCliente(cliente);
-        return ResponseEntity.ok(cliente);
+    @PostMapping("/registro")
+    @ResponseBody
+    public ResponseEntity<Cliente> registrarCliente(@RequestBody Cliente cliente) {
+        if (cliente.getRole() == null) {
+            cliente.setRole(Role.CLIENTE);
+        }
+        cliente.setPassword(passwordEncoder.encode(cliente.getPassword()));
+        Cliente createdCliente = clienteService.saveCliente(cliente);
+        return ResponseEntity.ok(createdCliente);
     }
 
     @GetMapping("/buscar/{id}")
@@ -58,6 +49,7 @@ public class ClienteController {
         clienteService.deleteCliente(id);
         return "Cliente eliminado correctamente";
     }
+}
 
 //    @PostMapping("/{id}/asignardestinos/{paqueteId}")
 //    public Paquete asignarDestinos(@PathVariable Long id, @PathVariable Long paqueteId, @RequestBody List<Long> destinoIds) {
@@ -67,4 +59,4 @@ public class ClienteController {
 //        paqueteService.savePaquete(paquete);
 //        return paquete;
 //    }
-}
+

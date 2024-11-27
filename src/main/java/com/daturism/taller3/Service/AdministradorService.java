@@ -1,8 +1,10 @@
 package com.daturism.taller3.Service;
 
+import com.daturism.taller3.Model.Administrador;
 import com.daturism.taller3.Model.Cliente;
 import com.daturism.taller3.Model.Destino;
 import com.daturism.taller3.Model.Paquete;
+import com.daturism.taller3.Repository.IAdministradorRepository;
 import com.daturism.taller3.Repository.IClienteRepository;
 import com.daturism.taller3.Repository.IDestinoRepository;
 import com.daturism.taller3.Repository.IPaqueteRepository;
@@ -23,6 +25,14 @@ public class AdministradorService {
 
     @Autowired
     private IDestinoRepository iDestinoRepository;
+
+    @Autowired
+    private IAdministradorRepository iAdministradorRepository;
+
+    public Administrador saveAdmin(Administrador admin) {
+        iAdministradorRepository.save(admin);
+        return admin;
+    }
 
 
     public List<Cliente> getClientes() {

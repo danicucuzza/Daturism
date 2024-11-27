@@ -6,10 +6,8 @@ import com.daturism.taller3.Repository.IClienteRepository;
 import com.daturism.taller3.Repository.IPaqueteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ClienteService {
@@ -24,8 +22,9 @@ public class ClienteService {
         return iClienteRepository.findAll();
     }
 
-    public void saveCliente(Cliente cliente) {
+    public Cliente saveCliente(Cliente cliente) {
         iClienteRepository.save(cliente);
+        return cliente;
     }
 
     public Cliente findCliente(Long id_cliente) {

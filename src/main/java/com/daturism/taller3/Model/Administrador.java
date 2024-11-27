@@ -19,5 +19,15 @@ public class Administrador{
     private String email;
 
     private String password;
-    private String nivelDeAcceso;
+
+    @Enumerated(EnumType.STRING)
+    private Role role = Role.ADMIN;
+
+
+    public Administrador(String nombre, String email, String password) {
+        this.nombre = nombre;
+        this.email = email;
+        this.password = password;
+        this.role = Role.ADMIN;
+    }
 }

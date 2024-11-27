@@ -1,9 +1,8 @@
 package com.daturism.taller3.Controller;
-import com.daturism.taller3.Model.Cliente;
-import com.daturism.taller3.Model.Destino;
-import com.daturism.taller3.Model.Paquete;
+import com.daturism.taller3.Model.*;
 import com.daturism.taller3.Service.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,13 +18,15 @@ public class AdministradorController {
     private DestinoService iDestinoService;
     @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    private AdministradorService administradorService;
 
     // Métodos para gestionar Clientes
-    @PostMapping("/clientes/crear")
+    @PostMapping("/registro")
     public Cliente crearCliente(@RequestBody Cliente cliente) {
         // Establecer rol de admin si no está definido
         if (cliente.getRole() == null) {
-            cliente.setRole(Cliente.Role.CLIENTE);
+            cliente.setRole(Role.CLIENTE);
         }
 
         // Encriptar contraseña
@@ -33,6 +34,19 @@ public class AdministradorController {
 
         iClienteService.saveCliente(cliente);
         return cliente;
+    }
+
+    @PostMapping("/crearadmin")
+    public Administrador registrarAdmin(@RequestBody Administrador admin) {
+        if (admin.getRole() == null) {
+            admin.setRole(Role.ADMIN);
+        }
+
+        // Encriptar contraseña
+        admin.setPassword(passwordEncoder.encode(admin.getPassword()));
+
+        administradorService.saveAdmin(admin);
+        return admin;
     }
 
     @GetMapping("/clientes/{id}")

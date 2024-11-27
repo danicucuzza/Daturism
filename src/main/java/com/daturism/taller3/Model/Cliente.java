@@ -42,10 +42,6 @@ public class Cliente implements UserDetails{
     @OneToMany
     private List<Paquete> carritoDeCompras;
 
-    public enum Role {
-        CLIENTE,
-        ADMIN
-    }
 
     public Cliente(String nombre, String email, String password, String telefono, String direccion) {
         this.nombre = nombre;

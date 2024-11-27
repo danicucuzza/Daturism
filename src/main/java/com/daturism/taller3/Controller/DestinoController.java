@@ -14,7 +14,7 @@ public class DestinoController {
     private DestinoService iDestinoService;
 
     @PostMapping("/crear")
-    public Destino createDestino(@RequestBody Destino destino){
+    public Destino createDestino(@RequestBody Destino destino) {
         iDestinoService.saveDestino(destino);
         return destino;
     }
@@ -41,13 +41,17 @@ public class DestinoController {
         return iDestinoService.findDestino(destino.getId_destino());
     }
 
-//    @GetMapping("/traerids")
-//    public List<Destino> getDestinosByIds(@RequestParam List<Long> ids) {
-//        return iDestinoService.getDestinosByIds(ids);
-//    }
-
     @GetMapping("/buscar/{palabra}")
     public List<Destino> findDestinoByName(@RequestParam String palabra) {
         return iDestinoService.findDestinoByName(palabra);
     }
 }
+
+//    @PostMapping("/{id}/asignardestinos/{paqueteId}")
+//    public Paquete asignarDestinos(@PathVariable Long id, @PathVariable Long paqueteId, @RequestBody List<Long> destinoIds) {
+//        Paquete paquete = paqueteService.findPaquete(paqueteId);
+//        List<Destino> destinos = destinoService.getDestinosByIds(destinoIds);
+//        paquete.setListaDeDestinos(destinos);
+//        paqueteService.savePaquete(paquete);
+//        return paquete;
+//    }

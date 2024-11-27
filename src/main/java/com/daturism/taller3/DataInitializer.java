@@ -1,8 +1,8 @@
 package com.daturism.taller3;
 
-import com.daturism.taller3.Model.Cliente;
+import com.daturism.taller3.Model.Administrador;
 import com.daturism.taller3.Model.Destino;
-import com.daturism.taller3.Model.Paquete;
+import com.daturism.taller3.Service.AdministradorService;
 import com.daturism.taller3.Service.ClienteService;
 import com.daturism.taller3.Service.DestinoService;
 import com.daturism.taller3.Service.PaqueteService;
@@ -21,18 +21,17 @@ public class DataInitializer implements CommandLineRunner {
 
     @Autowired
     private DestinoService destinoService;
-
     @Autowired
     private PaqueteService paqueteService;
-
     @Autowired
     private ClienteService clienteService;
-
+    @Autowired
+    private AdministradorService administradorService;
 
     @Transactional
     @Override
     public void run(String... args) throws Exception {
-        // Crear Destinos sin asignarles un paquete
+        // Destinos predeterminados
         List<Destino> destinos = new ArrayList<>(Arrays.asList(
                 new Destino("Tango en El Viejo Almacén", "Disfruta de un espectáculo clásico de tango en uno de los lugares más emblemáticos del barrio de San Telmo.", new BigDecimal("50000.00"), "San Telmo", "http://example.com/santelmotango.jpg"),
                 new Destino("Tour Histórico por el Casco Antiguo", "Descubre la historia y arquitectura de Buenos Aires en un recorrido guiado por San Telmo y Plaza de Mayo.", new BigDecimal("17500.00"), "San Telmo", "http://example.com/cascoantiguo.jpg"),
@@ -47,15 +46,10 @@ public class DataInitializer implements CommandLineRunner {
                 new Destino("City Tour por Buenos Aires", "Recorre los lugares más emblemáticos de Buenos Aires, desde La Boca hasta Recoleta.", new BigDecimal("19600.00"), "Buenos Aires", "http://example.com/citytour.jpg"),
                 new Destino("Experiencia de Asado Tradicional", "Vive el auténtico sabor argentino en un asado familiar lleno de tradición y camaradería.", new BigDecimal("35000.00"), "Buenos Aires", "http://example.com/asadotradicional.jpg")
         ));
-
         destinoService.saveAll(destinos);
 
-        // Crear Paquetes con destinos asignados
-//        Paquete paquete1 = new Paquete("Paquete Andes", "Explora la majestuosidad de los Andes con este paquete que incluye los destinos más icónicos.", "3 days", "http://example.com/paquete_andes.jpg");
-//        Paquete paquete2 = new Paquete("Paquete Patagónico", "Sumérgete en la belleza de la Patagonia con este exclusivo paquete.", "7 days", "http://example.com/paquete_patagonico.jpg");
-//        paqueteService.saveAll(Arrays.asList(paquete1, paquete2));
-//
-//        Cliente cliente1 = new Cliente("Juan", "juan.perez@gmail.com", "password123", "1544236543", "calle falsa 123");
-//        clienteService.saveCliente(cliente1);
+//        // Admin predeterminado
+//        Administrador admin = new Administrador("losadmin", "admin", "gianvago");
+//        administradorService.saveAdmin(admin);
     }
 }
