@@ -41,19 +41,19 @@ public class ClienteController {
         return ResponseEntity.ok(cliente);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/buscar/{id}")
     public Cliente obtenerCliente(@PathVariable Long id) {
         return clienteService.findCliente(id);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/actualizar/{id}")
     public Cliente actualizarCliente(@PathVariable Long id, @RequestBody Cliente cliente) {
         cliente.setId(id);
         clienteService.editCliente(cliente);
         return cliente;
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/eliminar/{id}")
     public String eliminarCliente(@PathVariable Long id) {
         clienteService.deleteCliente(id);
         return "Cliente eliminado correctamente";

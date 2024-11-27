@@ -21,6 +21,9 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authz -> authz
                         // Endpoints públicos
                         .requestMatchers("/api/clientes/registro").permitAll()
+                        .requestMatchers("/api/destinos/buscar/{palabra}").permitAll()
+                        .requestMatchers("/api/destinos/traertodos").permitAll()
+                        .requestMatchers("/api/destinos/{id}").permitAll()
 
                         // Endpoints de administrador
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")

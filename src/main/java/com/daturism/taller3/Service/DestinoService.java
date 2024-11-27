@@ -53,6 +53,20 @@ public class DestinoService{
     }
 
     public void saveAll(List<Destino> destinos) {
-        iDestinoRepository.saveAll(destinos);
+        List<Destino> destinosANoAgregar = new ArrayList<>();
+
+        for (Destino destino : destinos) {
+            List<Destino> destinosExistentes = findDestinoByName(destino.getNombre());
+            if (!destinosExistentes.isEmpty()) {
+                destinosANoAgregar.add(destino);
+            }
+        }
+
+        destinos.removeAll(destinosANoAgregar);
+
+        // Guarda solo los destinos que no están duplicados
+        if (!destinos.isEmpty()) {
+            iDestinoRepository.saveAll(destinos);
+        }
     }
 }
