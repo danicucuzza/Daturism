@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "@wix/ecom": "^1.0.827",
+    "@wix/sdk": "^1.14.3"
+  }
+}
