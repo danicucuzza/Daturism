@@ -4,9 +4,8 @@ Bienvenido al proyecto E-commerce de Turismo, una plataforma en línea para gest
 
 ## Características
 
-- **Gestión de Paquetes:** Crear, editar, y eliminar paquetes turísticos.
 - **Exploración de Destinos:** Visualizar y buscar destinos turísticos.
-- **Reservas:** Realizar y gestionar reservas de paquetes turísticos.
+- **Reservas:** Realizar y gestionar reservas de excursiones.
 - **Usuarios:** Registro y gestión de usuarios.
 
 ## Tecnologías Utilizadas
@@ -15,12 +14,12 @@ Bienvenido al proyecto E-commerce de Turismo, una plataforma en línea para gest
 
 - **Java con Spring Boot**
 - **Spring Data JPA**
+- **Spring Security**
 - **MySQL**
 
 ### Frontend
 
-- **TypeScript**
-- **React**
+- **NextJS**
 - **HTML5**
 - **CSS3**
 
@@ -31,5 +30,5 @@ Bienvenido al proyecto E-commerce de Turismo, una plataforma en línea para gest
 
 ## Estado del Proyecto
 
-Este proyecto se encuentra en fase de desarrollo.
+Proyecto funcional.
 
