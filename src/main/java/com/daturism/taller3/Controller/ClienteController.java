@@ -49,14 +49,13 @@ public class ClienteController {
         clienteService.deleteCliente(id);
         return "Cliente eliminado correctamente";
     }
+
+    @GetMapping("/buscar-por-email/{email}")
+    public ResponseEntity<Cliente> obtenerClientePorEmail(@PathVariable String email) {
+        Cliente cliente = clienteService.findByEmail(email);
+        if (cliente != null) {
+            return ResponseEntity.ok(cliente);
+        }
+        return ResponseEntity.notFound().build();
+    }
 }
-
-//    @PostMapping("/{id}/asignardestinos/{paqueteId}")
-//    public Paquete asignarDestinos(@PathVariable Long id, @PathVariable Long paqueteId, @RequestBody List<Long> destinoIds) {
-//        Paquete paquete = paqueteService.findPaquete(paqueteId);
-//        List<Destino> destinos = destinoService.getDestinosByIds(destinoIds);
-//        paquete.setListaDeDestinos(destinos);
-//        paqueteService.savePaquete(paquete);
-//        return paquete;
-//    }
-

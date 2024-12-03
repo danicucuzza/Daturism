@@ -1,3 +1,4 @@
+/home/danicucuzza/Escritorio/daturism/Daturism/src/main/java/com/daturism/taller3/Config/CorsConfig.java
 /home/danicucuzza/Escritorio/daturism/Daturism/src/main/java/com/daturism/taller3/Config/CustomAuthenticationEntryPoint.java
 /home/danicucuzza/Escritorio/daturism/Daturism/src/main/java/com/daturism/taller3/Config/JwtTokenFilter.java
 /home/danicucuzza/Escritorio/daturism/Daturism/src/main/java/com/daturism/taller3/Config/JwtTokenProvider.java
@@ -8,6 +9,7 @@
 /home/danicucuzza/Escritorio/daturism/Daturism/src/main/java/com/daturism/taller3/Controller/ClienteController.java
 /home/danicucuzza/Escritorio/daturism/Daturism/src/main/java/com/daturism/taller3/Controller/DestinoController.java
 /home/danicucuzza/Escritorio/daturism/Daturism/src/main/java/com/daturism/taller3/Controller/PaqueteController.java
+/home/danicucuzza/Escritorio/daturism/Daturism/src/main/java/com/daturism/taller3/Controller/TestLoginController.java
 /home/danicucuzza/Escritorio/daturism/Daturism/src/main/java/com/daturism/taller3/DataInitializer.java
 /home/danicucuzza/Escritorio/daturism/Daturism/src/main/java/com/daturism/taller3/Model/Administrador.java
 /home/danicucuzza/Escritorio/daturism/Daturism/src/main/java/com/daturism/taller3/Model/Cliente.java

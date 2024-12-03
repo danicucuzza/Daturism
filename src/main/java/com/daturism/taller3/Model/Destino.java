@@ -22,7 +22,7 @@ public class Destino {
     private String descripcion;
     private BigDecimal precio;
     private int maxPeople;
-    private int duration;
+    private String duration;
     private String ubicacion;
     private String imagenUrl;
 
@@ -31,10 +31,12 @@ public class Destino {
     @JsonIgnore
     private Paquete paquete;
 
-    public Destino(String nombre, String descripcion, BigDecimal precio, String ubicacion, String imagenUrl) {
+    public Destino(String nombre, String descripcion, BigDecimal precio, int maxPeople, String duration, String ubicacion, String imagenUrl) {
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.precio = precio;
+        this.maxPeople = maxPeople;
+        this.duration = duration;
         this.ubicacion = ubicacion;
         this.imagenUrl = imagenUrl;
     }

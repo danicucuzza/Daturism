@@ -27,6 +27,11 @@ public class ClienteService {
         return cliente;
     }
 
+    public Cliente findByEmail(String email) {
+        return iClienteRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Cliente no encontrado"));
+    }
+
     public Cliente findCliente(Long id_cliente) {
         return iClienteRepository.findById(id_cliente).orElse(null);
     }

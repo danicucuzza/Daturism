@@ -8,7 +8,13 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/destinos")
-public class DestinoController {
+@CrossOrigin(origins = "http://localhost:3000", methods = {
+        RequestMethod.GET,
+        RequestMethod.POST,
+        RequestMethod.PUT,
+        RequestMethod.DELETE
+})
+public class DestinoController  {
 
     @Autowired
     private DestinoService iDestinoService;
